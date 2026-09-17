@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airport Cost Escalation Explorer</title>
+  <meta name="description" content="Interactive companion to a study of construction cost escalation across the airport project lifecycle during the IIJA funding surge.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%E2%9C%88%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-row">
+      <span class="brand"><span class="brand-mark" aria-hidden="true">✈</span> Airport Cost Escalation Explorer</span>
+      <div class="stage-nav" role="tablist" aria-label="Sections">
+        <button type="button" role="tab" id="tab-map" data-panel="map" aria-controls="map" aria-selected="true">Map</button>
+        <button type="button" role="tab" id="tab-lifecycle" data-panel="lifecycle" aria-controls="lifecycle" aria-selected="false" tabindex="-1">Lifecycle</button>
+        <button type="button" role="tab" id="tab-tools" data-panel="tools" aria-controls="tools" aria-selected="false" tabindex="-1">Tools</button>
+        <button type="button" role="tab" id="tab-data" data-panel="data" aria-controls="data" aria-selected="false" tabindex="-1">Data</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+<section id="map" class="band panel" role="tabpanel" aria-labelledby="tab-map">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">Geography</p>
+          <h2>Where IIJA money went and where airport estimates grew</h2>
+          <p>Circles are NPIAS airports sized by their estimate in the 2025 to 2029 report and colored by the change from the 2021 to 2025 report. States are shaded by the AIG and ATP dollars they received. Drag to pan, scroll or pinch to zoom, hover for details, and click an airport or a state to open its card.</p>
+        </header>
+        <div class="controls" id="map-controls"></div>
+        <div class="map-layout">
+          <div class="card map-card">
+            <div class="map-buttons"></div>
+            <div class="map-stage" id="map-stage"></div>
+            <div class="map-legend" id="map-legend"></div>
+          </div>
+          <aside class="card detail-card" id="map-detail" aria-live="polite"></aside>
+        </div>
+        <figure class="card map-states" id="map-states"></figure>
+      </div>
+    </section>
+
+    <section id="lifecycle" class="band panel" role="tabpanel" aria-labelledby="tab-lifecycle" hidden>
+      <div class="wrap">
+        <p class="eyebrow">Companion web app</p>
+        <h1>Where construction cost escalation surfaced during the IIJA airport funding surge</h1>
+        <p class="lede">Federal airport grants nearly doubled after the Infrastructure Investment and Jobs Act (IIJA). This app follows airport projects from funding to planning estimates, bids, awards, and changes after award, using FAA grant histories, NPIAS reports, IIJA allocations and awards, state bid tabulations, DFW Board actions, and federal amendment histories.</p>
+        <div class="stat-row" id="stat-row"></div>
+        <ol class="lifecycle" id="lifecycle-nav" role="tablist" aria-label="Lifecycle stages"></ol>
+    <div id="funding" class="stage-panel" role="tabpanel" aria-labelledby="step-funding" hidden>
+          <div class="wrap">
+            <header class="section-head">
+              <p class="kicker">Stage 1 · Funding</p>
+              <h2>Grants nearly doubled and shifted toward terminals</h2>
+              <p>Federal airport grants excluding pandemic relief averaged $3.6 billion per year in FY2017 to FY2021 and $6.7 billion per year in FY2022 to FY2025, an 88.5% increase. Terminals rose from 6% to 25% of these grant dollars.</p>
+            </header>
+            <div class="controls" id="funding-controls"></div>
+            <div class="grid-2 wide-left">
+              <figure class="card" id="funding-bars"></figure>
+              <figure class="card" id="funding-shift"></figure>
+            </div>
+            <div class="controls" id="category-controls"></div>
+            <div class="grid-2 wide-left">
+              <figure class="card" id="category-trend"></figure>
+              <figure class="card" id="category-size"></figure>
+            </div>
+          </div>
+            </div>
+    <div id="planning" class="stage-panel" role="tabpanel" aria-labelledby="step-planning" hidden>
+          <div class="wrap">
+            <header class="section-head">
+              <p class="kicker">Stage 2 · Planning estimate</p>
+              <h2>Planning estimates rose far faster than material prices, led by terminals</h2>
+              <p>National five-year development estimates rose 94% between the 2019 to 2023 and 2025 to 2029 NPIAS reports, while the producer price index (PPI) for construction materials rose 39%. In 2023 dollars, terminal need rose $12.9 billion while total need rose $6.2 billion.</p>
+            </header>
+            <div class="controls" id="planning-controls"></div>
+            <div class="grid-2">
+              <figure class="card" id="npias-totals"></figure>
+              <figure class="card" id="npias-index"></figure>
+            </div>
+            <div class="grid-2">
+              <figure class="card" id="npias-revisions"></figure>
+              <figure class="card" id="npias-large-hubs"></figure>
+            </div>
+            <figure class="card" id="devmix-bars"></figure>
+            <div class="grid-2">
+              <figure class="card" id="devmix-change"></figure>
+              <figure class="card" id="devmix-terminal"></figure>
+            </div>
+            <header class="section-head sub">
+              <h3>Did airports that received more IIJA money revise their estimates more?</h3>
+              <p>Revisions were larger at airports with terminal grants, but those airports had large revisions before the IIJA as well. Once each airport is compared with its own earlier revisions, the dose terms are small and not significant.</p>
+            </header>
+            <div class="grid-2">
+              <figure class="card" id="dose-classes"></figure>
+              <figure class="card" id="dose-binned"></figure>
+            </div>
+            <div class="grid-2">
+              <figure class="card" id="dose-coefs"></figure>
+              <figure class="card" id="dose-scatter"></figure>
+            </div>
+          </div>
+            </div>
+    <div id="bids" class="stage-panel" role="tabpanel" aria-labelledby="step-bids" hidden>
+          <div class="wrap">
+            <header class="section-head">
+              <p class="kicker">Stage 3 · Bid</p>
+              <h2>Unit prices rose with input prices nationally, far more in some states, and low bids scattered more widely around estimates</h2>
+              <p>A hedonic index of 23,784 unit priced line items from 1,221 capital projects in nine states averaged 123.0 in 2022 to 2025 (2021 = 100), against 119.4 for the PPI of highway and street inputs. The state indexes run from 97.1 to 169.4, so a national average is a weak guide for any one program.</p>
+            </header>
+            <div class="controls" id="project-controls"></div>
+            <div class="grid-2 wide-left">
+              <figure class="card" id="bid-projects"></figure>
+              <figure class="card" id="bid-bidders"></figure>
+            </div>
+            <div class="grid-2 wide-left">
+              <figure class="card" id="bid-index"></figure>
+              <div class="card spec-card" id="bid-specs"></div>
+            </div>
+            <figure class="card" id="bid-families"></figure>
+          </div>
+            </div>
+    <div id="award" class="stage-panel" role="tabpanel" aria-labelledby="step-award" hidden>
+          <div class="wrap">
+            <header class="section-head">
+              <p class="kicker">Stage 4 · Award</p>
+              <h2>A large hub owner absorbed escalation at award</h2>
+              <p>At Dallas Fort Worth International Airport (DFW), change order allowances appeared on 34% of design-bid-build (DBB) awards in 2022 to 2024, up from 4% in 2016 to 2021, while median bids fell from 4 to 3 before recovering to 4 in 2025 and 2026. Growth within 24 months of award did not rise.</p>
+            </header>
+            <div class="controls" id="award-controls"></div>
+            <div class="grid-2">
+              <figure class="card" id="dfw-dollars"></figure>
+              <figure class="card" id="dfw-bids"></figure>
+            </div>
+            <div class="grid-2">
+              <figure class="card" id="dfw-shares"></figure>
+              <figure class="card" id="dfw-cdf"></figure>
+            </div>
+            <figure class="card" id="dfw-timeline"></figure>
+          </div>
+            </div>
+    <div id="postaward" class="stage-panel" role="tabpanel" aria-labelledby="step-postaward" hidden>
+          <div class="wrap">
+            <header class="section-head">
+              <p class="kicker">Stage 5 · After award</p>
+              <h2>Fewer federal construction grants needed more money</h2>
+              <p>Across 21,576 AIP construction grants observed for at least 36 months, the adjusted probability of receiving added funds fell from 19% for FY2011 to FY2019 grants to 11% for FY2022 to FY2023 grants. Construction grants are generally issued for bid amounts, so price growth up to bid opening is already in the grant.</p>
+            </header>
+            <div class="grid-2">
+              <figure class="card" id="post-years"></figure>
+              <figure class="card" id="post-net"></figure>
+            </div>
+            <div class="grid-2">
+              <figure class="card" id="post-timing"></figure>
+              <figure class="card" id="post-hub"></figure>
+            </div>
+            <figure class="card" id="post-adjusted"></figure>
+          </div>
+            </div>
+    <div id="synthesis" class="stage-panel" role="tabpanel" aria-labelledby="step-synthesis" hidden>
+          <div class="wrap">
+            <header class="section-head">
+              <p class="kicker">Across the lifecycle</p>
+              <h2>Escalation surfaced before award</h2>
+              <p>Each row of Fig. 10 in the paper is a panel here: yearly indicators on the left and the 2017 to 2021 and 2022 to 2025 means on the right. Hover any panel to read the same year in every stage, or press play to step through the years. The indicators before award rose with the funding surge, while the indicator after award declined.</p>
+            </header>
+            <div class="synthesis-grid" id="synthesis-grid"></div>
+          </div>
+            </div>
+      </div>
+    </section>
+
+<section id="tools" class="band panel" role="tabpanel" aria-labelledby="tab-tools" hidden>
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">Tools</p>
+          <h2>Apply the findings to a project or an airport</h2>
+          <p>Two tools put the study results to work. They rest on the samples described in the paper and are meant for screening and discussion, not as a replacement for a project estimate.</p>
+        </header>
+        <div class="grid-2 tools-grid">
+          <div class="card tool-card" id="tool-estimator"></div>
+          <div class="card tool-card" id="tool-explorer"></div>
+        </div>
+      </div>
+    </section>
+
+<section id="data" class="band panel" role="tabpanel" aria-labelledby="tab-data" hidden>
+      <div class="wrap">
+        <header class="section-head">
+          <p class="kicker">Data and methods</p>
+          <h2>Records behind the app</h2>
+        </header>
+        <div class="grid-2">
+          <div class="card prose" id="methods"></div>
+          <div class="card prose" id="sources"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+</body>
+</html>
