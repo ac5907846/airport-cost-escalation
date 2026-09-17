@@ -319,10 +319,15 @@ export async function initMap() {
     svg.transition().duration(900).call(zoom.transform, d3.zoomIdentity.translate(W / 2, H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2));
   });
   playBtn.addEventListener("click", () => {
+    autoStarted = true;
     if (playTimer) {
       stopPlay();
       return;
     }
+    startPlay();
+  });
+
+  function startPlay() {
     if (view.size !== "est") {
       view.size = "est";
       sizeControl.set("est");
@@ -342,7 +347,26 @@ export async function initMap() {
       playTimer = setTimeout(stepFn, 1500);
     };
     stepFn();
-  });
+  }
+
+  // The playback runs by itself the first time the map is seen, so a reader who lands on the page watches the
+  // estimates move across the five NPIAS reports. Pressing pause or touching the map ends it and it does not
+  // start again. A reader who asked for reduced motion never sees it start.
+  let autoStarted = false;
+
+  function autoStart() {
+    if (autoStarted || reducedMotion()) return;
+    autoStarted = true;
+    playTimer = setTimeout(() => {
+      playTimer = 0;
+      startPlay();
+    }, 1200);
+  }
+
+  stage.addEventListener("pointerdown", () => {
+    autoStarted = true;
+    if (playTimer) stopPlay();
+  }, true);
 
   function stopPlay() {
     clearTimeout(playTimer);
@@ -1187,6 +1211,7 @@ export async function initMap() {
   onReveal(stage, () => {
     revealed = true;
     runIntro();
+    autoStart();
   }, 0.25);
   if (!revealed && introT < 1) drawCanvas();
 }
