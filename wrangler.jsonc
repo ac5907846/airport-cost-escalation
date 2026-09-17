@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "airport-cost-escalation",
+  "compatibility_date": "2026-09-16",
+  "observability": { "enabled": true },
+  "assets": { "directory": "./public" },
+  "routes": [
+    { "pattern": "airport.electriai.com", "custom_domain": true }
+  ]
+}

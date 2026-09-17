@@ -18,6 +18,21 @@ Web app for the study of construction cost escalation across the airport project
 
 The page is static. It loads D3 7.9.0 from jsDelivr and reads everything else from `data/`.
 
+## Live site
+
+https://airport.electriai.com
+
+## Deploy
+
+`wrangler.jsonc` points at `public/`, which is a copy of the four served folders and `index.html`, so nothing from the
+working tree such as `.git` is uploaded. To publish a change:
+
+```
+cd 05_web_app
+mkdir -p public && cp -r index.html README.md css js data public/
+npx wrangler deploy
+```
+
 ## Run locally
 
 ```
